@@ -1,7 +1,7 @@
 import { get, post, del } from "../api";
 
 export async function getMenu() {
-  let json = await get("/api/menu");
+  let json = await get("/api/menu_items");
   let parsedjson = {};
   for (let i = 0, tem; i < json.length; i++) {
     tem = json[i];
@@ -11,7 +11,7 @@ export async function getMenu() {
 }
 
 export async function getOrder() {
-  let orderItems = await get("/api/order");
+  let orderItems = await get("/api/mealOrders");
   let normalizedOrder = {};
   for (let orderItem of orderItems) {
     let { itemId, quantity } = orderItem;
@@ -21,7 +21,7 @@ export async function getOrder() {
 }
 
 export async function updateOrderItem(itemId, quantity) {
-  let json = await post("/api/order", {
+  let json = await post("/api/mealOrders", {
     itemId,
     quantity
   });
@@ -30,17 +30,20 @@ export async function updateOrderItem(itemId, quantity) {
 
 // add to existing quantity if order item exist
 export async function addOrderItem(itemId, quantity) {
-  let json = await post("/api/order/add", {
+  let json = await post("/api/mealOrders/add", {
     itemId,
     quantity
   });
   return json;
 }
 
-
 export async function deleteOrderItem(itemId) {
-  let json = await del("/api/order", {
-    itemId
-  });
-  return json;
+  try {
+    let json = await del("/api/mealOrders", {
+      itemId
+    });
+    return json;
+  } catch (error) {
+    console.log(error);
+  }
 }

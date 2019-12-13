@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+class SuccessResponse {
+    private boolean success = true;
+}
+
 @RestController
 public class MealOrderController {
 
@@ -26,7 +30,6 @@ public class MealOrderController {
 
     @PostMapping("/api/mealOrders")
     public MealOrder postMealOrder(@RequestBody MealOrder mealOrder) {
-//        System.out.println(mealOrder);
         if (mealOrderRepo.existsById(mealOrder.getItemId())) {
             MealOrder foundMealOrder = mealOrderRepo.findById(mealOrder.getItemId()).get();
             foundMealOrder.setQuantity(mealOrder.getQuantity());
@@ -35,5 +38,25 @@ public class MealOrderController {
             return mealOrderRepo.save(mealOrder);
         }
     }
+
+    @PostMapping("/api/mealOrders/add")
+    public MealOrder addQuantityToMealOrder(@RequestBody MealOrder mealOrder) {
+        if (mealOrderRepo.existsById(mealOrder.getItemId())) {
+            MealOrder mealOrderFound = mealOrderRepo.findById(mealOrder.getItemId()).get();
+            mealOrderFound.setQuantity(mealOrderFound.getQuantity() + mealOrder.getQuantity());
+            mealOrderRepo.save(mealOrderFound);
+            return mealOrderFound;
+        } else {
+            return mealOrderRepo.save(mealOrder);
+        }
+    }
+
+    @DeleteMapping("/api/mealOrders")
+    public SuccessResponse deleteMealOrder(@RequestBody MealOrder mealOrder) {
+        mealOrderRepo.deleteById(mealOrder.getItemId());
+        return new SuccessResponse();
+    }
+
+
 
 }

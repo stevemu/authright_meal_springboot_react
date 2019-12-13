@@ -39,12 +39,12 @@ public class MenuItemController {
     }
 
     // Get All the MenuItem
-    @GetMapping("/api/Menu")
-    public Iterable<MenuItem> getMenu() {
-        return menuItemRepo.findAll();
-    }
+//    @GetMapping("/api/menu")
+//    public Iterable<MenuItem> getMenu() {
+//        return menuItemRepo.findAll();
+//    }
 
-    @GetMapping("/api/Menu/{itemId}")
+    @GetMapping("/api/menu_items/{itemId}")
     public MenuItem getMenuItem(@PathVariable String itemId) {
         return menuItemRepo.findById(itemId).get();
     }
